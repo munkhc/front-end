@@ -32,76 +32,105 @@ export default function Home() {
     });
   }, [data, search]);
 
-  return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-semibold mb-4">Medeelel</h1>
+  // DELETE
+  const handleDelete = (id) => {
+    setData((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
+  };
 
-      {/* SEARCH BAR */}
+  return (
+    <div className="min-h-screen p-4 sm:p-6 bg-black text-white">
+      
+      {/* TITLE */}
+      <h1 className="text-2xl sm:text-3xl font-semibold mb-5">
+        Medeelel
+      </h1>
+
+      {/* SEARCH */}
       <input
         type="text"
         placeholder="Search anything..."
-        className="border p-2 rounded-md mb-5 w-full"
+        className="w-full border border-gray-700 p-3 rounded-md mb-6 bg-gray-900 text-white placeholder:text-gray-400 outline-none"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* LIST */}
-      {filtered.map((item) => {
-        const list = Array.isArray(item.ed)
-          ? item.ed
-          : Array.isArray(item.items)
-          ? item.items
-          : [];
+      {/* CARDS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.map((item) => {
+          const list = Array.isArray(item.ed)
+            ? item.ed
+            : Array.isArray(item.items)
+            ? item.items
+            : [];
 
-        return (
-          <div
-            key={item.id}
-            className="bg-white rounded-xl p-4 mb-4 shadow-sm"
-          >
-            <img
-              src={item.image || "/default-avatar.png"}
-              alt={item.ner || "user"}
-              className="w-20 h-20 object-cover rounded-full border mb-3"
-            />
-
-            {/* BADGE */}
-            <span className="bg-gray-200 px-2 py-1 rounded text-sm">
-              {item.mergejil}
-            </span>
-
-            <p className="mt-2 font-medium">
-              {item.ovog} {item.ner}
-            </p>
-            <p className="text-sm text-gray-500">{item.huis}</p>
-            <p className="text-sm">Age: {item.nas}</p>
-            <p className="text-sm">Height: {item.undur_sm} cm</p>
-            <p className="text-sm">{item.email}</p>
-
-            {/* ITEMS */}
-            <ul className="mt-2 list-disc ml-5 text-sm">
-              {list.map((ed, i) => (
-                <li key={i}>{ed?.name}</li>
-              ))}
-            </ul>
-
-            {/* DELETE */}
-            <button
-              onClick={() =>
-                setData((prev) =>
-                  prev.filter((i) => i.id !== item.id)
-                )
-              }
-              className="mt-3 bg-red-500 text-white px-3 py-1 rounded"
+          return (
+            <div
+              key={item.id}
+              className="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-md"
             >
-              Delete
-            </button>
-          </div>
-        );
-      })}
+              {/* IMAGE */}
+              <div className="flex justify-center">
+                <img
+                  src={item.image || "/default-avatar.png"}
+                  alt={item.ner || "user"}
+                  className="w-24 h-24 rounded-full object-cover border border-gray-700 mb-3"
+                />
+              </div>
 
-      {/* NO RESULT */}
+              {/* JOB */}
+              <div className="mb-2">
+                <span className="bg-gray-700 px-2 py-1 rounded text-sm">
+                  {item.mergejil}
+                </span>
+              </div>
+
+              {/* INFO */}
+              <p className="font-semibold text-lg">
+                {item.ovog} {item.ner}
+              </p>
+
+              <p className="text-sm text-gray-400">
+                {item.huis}
+              </p>
+
+              <p className="text-sm mt-1">
+                Age: {item.nas}
+              </p>
+
+              <p className="text-sm">
+                Height: {item.undur_sm} cm
+              </p>
+
+              <p className="text-sm break-all">
+                {item.email}
+              </p>
+
+              {/* LIST */}
+              <ul className="mt-3 list-disc ml-5 text-sm space-y-1">
+                {list.map((ed, i) => (
+                  <li key={i}>{ed?.name}</li>
+                ))}
+              </ul>
+
+              {/* DELETE BUTTON */}
+              <button
+                onClick={() => handleDelete(item.id)}
+                className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
+              >
+                Delete
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* EMPTY */}
       {filtered.length === 0 && (
-        <p className="text-gray-500">No results found</p>
+        <p className="text-gray-400 mt-6">
+          No results found
+        </p>
       )}
     </div>
   );
